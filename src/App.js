@@ -1,51 +1,45 @@
-import React, {useEffect, useState, useMemo, useCallback } from "react";
+import React, { useEffect, useState } from "react";
 import './styles.css';
+// https://sujeitoprogramador.com/rn-api/?api=posts
 
 function App() {
 
-const [tarefas, setTarefas] = useState([ 
-  'Estudar Cálculo',
-  'Fazer lista de apartamentos'
-]);
+  const [nutri, setNutri] = useState([]);
 
-const [input, setInput] = useState('');
+  useEffect(() => {
 
-/* Pega o que já está armazenado no localStorage */
-/*
-useEffect(() => {
-  const tarefasStorage = localStorage.getItem('tarefas');
+    function loadApi(){
+      let url = 'https://sujeitoprogramador.com/rn-api/?api=posts';
 
-  if(tarefasStorage){
-    setTarefas(JSON.parse(tarefasStorage));
-  }
-},
+      fetch(url)
+      .then((r) => r.json())
+      .then((json) => {
+        console.log(json);
+        setNutri(json);
+      })
 
-[]);
-*/
-
-useEffect(() => {
-    localStorage.setItem('tarefas', JSON.stringify(tarefas));
-}, [tarefas]);
-
-const handleAdd = useCallback(() => {
-  setTarefas([...tarefas, input]);
-  setInput('');
-}, [input, tarefas]);
-
-const totalTarefas = useMemo( () => tarefas.length, [tarefas]);
+    }
+    loadApi();
+  }, []);
 
   return (
     <div className="container">
-      <h1>Tarefas</h1>
-      <ul>
-        {tarefas.map(tarefa => (
-          <li key={tarefa}>{tarefa}</li>
-        ))}
-      </ul>
-      <br/>
-      <strong>Você tem {totalTarefas} tarefas!</strong><br/>
-      <input type="text" name="entrada" value={input} onChange={(e) => setInput(e.target.value)} />
-      <button type="button" onClick={handleAdd}>Cadastrar</button>
+      <header>
+        <strong>React Nutri</strong>
+      </header>
+      {nutri.map((item) => {
+        return(
+          <article key={item.id} className="post">
+            <strong className="titulo">{item.titulo}</strong>
+            <img src={item.capa} alt={item.titulo} className="capa" />
+            <p className="subtitulo">
+              {item.subtitulo}
+            </p>
+            <h1>Categoria: {item.categoria}</h1>
+            <a className="botao">Acessar</a>
+          </article>
+        )
+      })}
     </div>
   );
 }
