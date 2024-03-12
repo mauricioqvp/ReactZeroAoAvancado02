@@ -1,4 +1,5 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useState, useMemo } from "react";
+import './styles.css';
 
 function App() {
 
@@ -31,14 +32,18 @@ function handleAdd(){
   setInput('');
 }
 
+const totalTarefas = useMemo( () => tarefas.length, [tarefas]);
+
   return (
-    <div>
+    <div className="container">
       <h1>Tarefas</h1>
       <ul>
         {tarefas.map(tarefa => (
           <li key={tarefa}>{tarefa}</li>
         ))}
       </ul>
+      <br/>
+      <strong>Você tem {totalTarefas} tarefas!</strong><br/>
       <input type="text" name="entrada" value={input} onChange={(e) => setInput(e.target.value)} />
       <button type="button" onClick={handleAdd}>Cadastrar</button>
     </div>
