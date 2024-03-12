@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 
 function App() {
 
@@ -8,6 +8,23 @@ const [tarefas, setTarefas] = useState([
 ]);
 
 const [input, setInput] = useState('');
+
+/* Pega o que já está armazenado no localStorage */
+/*
+useEffect(() => {
+  const tarefasStorage = localStorage.getItem('tarefas');
+
+  if(tarefasStorage){
+    setTarefas(JSON.parse(tarefasStorage));
+  }
+},
+
+[]);
+*/
+
+useEffect(() => {
+    localStorage.setItem('tarefas', JSON.stringify(tarefas));
+}, [tarefas]);
 
 function handleAdd(){
   setTarefas([...tarefas, input]);
